@@ -14,7 +14,7 @@ Instruction::Instruction(uint16_t word) {
     s = p3;
     t = p4;
 
-    address = (p3 << 4) | p4;
+    address = static_cast<uint8_t>(word & 0xFF);
 }
 
 Opcode Instruction::getOpcode() const { return opcode; }
