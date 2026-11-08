@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// Constructor
 CPU::CPU(Memory& memory, Screen& screen)
     : programCounter(0),
       instructionRegister(0),
@@ -18,7 +17,6 @@ CPU::CPU(Memory& memory, Screen& screen)
 {
 }
 
-// Reset CPU
 void CPU::reset(uint8_t startAddress)
 {
     programCounter = startAddress;
@@ -30,7 +28,6 @@ void CPU::reset(uint8_t startAddress)
     registers.clear();
 }
 
-// Fetch instruction from memory
 bool CPU::fetch()
 {
     if (programCounter >= 255 || programCounter + 1 >= 255)
@@ -50,13 +47,11 @@ bool CPU::fetch()
     return true;
 }
 
-// Decode instruction
 Instruction CPU::decode()
 {
     return Instruction(instructionRegister);
 }
 
-// Execute instruction
 void CPU::execute(const Instruction& inst)
 {
     switch (inst.getOpcode())
@@ -109,7 +104,6 @@ void CPU::execute(const Instruction& inst)
     }
 }
 
-// Execute one instruction
 void CPU::step()
 {
     if (status != CpuStatus::RUNNING)
@@ -129,7 +123,6 @@ void CPU::step()
     execute(inst);
 }
 
-// Load from memory
 void CPU::executeLoadFromMemory(const Instruction& inst)
 {
     int r = inst.getR();
@@ -140,7 +133,6 @@ void CPU::executeLoadFromMemory(const Instruction& inst)
     registers.writeRegister(r, value);
 }
 
-// Load immediate value
 void CPU::executeLoadImmediate(const Instruction& inst)
 {
     int r = inst.getR();
@@ -150,7 +142,6 @@ void CPU::executeLoadImmediate(const Instruction& inst)
     registers.writeRegister(r, value);
 }
 
-// Store register value in memory
 void CPU::executeStore(const Instruction& inst)
 {
     int r = inst.getR();
@@ -168,7 +159,6 @@ void CPU::executeStore(const Instruction& inst)
     }
 }
 
-// Move register R to register S
 void CPU::executeMove(const Instruction& inst)
 {
     int r = inst.getS();
@@ -179,7 +169,6 @@ void CPU::executeMove(const Instruction& inst)
     registers.writeRegister(s, value);
 }
 
-// Add as two's complement integers
 void CPU::executeAddInteger(const Instruction& inst)
 {
     int r = inst.getR();
@@ -194,7 +183,6 @@ void CPU::executeAddInteger(const Instruction& inst)
     registers.writeRegister(r, result);
 }
 
-// Add floating-point values
 void CPU::executeAddFloat(const Instruction& inst)
 {
     int r = inst.getR();
@@ -212,7 +200,6 @@ void CPU::executeAddFloat(const Instruction& inst)
     registers.writeRegister(r, result);
 }
 
-// Bitwise operations
 void CPU::executeBitwise(const Instruction& inst)
 {
     int r = inst.getR();
@@ -246,7 +233,6 @@ void CPU::executeBitwise(const Instruction& inst)
     registers.writeRegister(r, result);
 }
 
-// Rotate register right
 void CPU::executeRotate(const Instruction& inst)
 {
     int r = inst.getR();
@@ -269,7 +255,6 @@ void CPU::executeRotate(const Instruction& inst)
     registers.writeRegister(r, value);
 }
 
-// Jump if register R equals register 0
 void CPU::executeJump(const Instruction& inst)
 {
     int r = inst.getR();
@@ -282,13 +267,11 @@ void CPU::executeJump(const Instruction& inst)
     }
 }
 
-// Halt CPU
 void CPU::executeHalt()
 {
     status = CpuStatus::HALTED;
 }
 
-// Handle errors
 void CPU::fault(const string& message)
 {
     status = CpuStatus::FAULTED;
@@ -297,7 +280,6 @@ void CPU::fault(const string& message)
     screen.displayMessage(message);
 }
 
-// Getters
 CpuStatus CPU::getStatus() const
 {
     return status;
