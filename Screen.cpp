@@ -3,6 +3,7 @@
 #include "RegisterFile.h"
 #include <iostream>
 #include <iomanip>
+#include "CPU.h"
 
 Screen::Screen() {
     clearOutputBuffer();
@@ -12,7 +13,7 @@ void Screen::displayOutput(unsigned char value) {
     std::cout << "[Screen Output]: " << static_cast<char>(value) 
               << " (Hex: 0x" << std::hex << std::uppercase << (int)value << std::dec << ")\n";
 }
-void Screen::displayMessage(std::string message) {
+void Screen::displayMessage(const std::string& message) {
     std::cout << message << std::endl;
 }
 void Screen::displayMemory(const Memory& memory) {
@@ -36,9 +37,33 @@ void Screen::displayRegisters(const RegisterFile& registers) {
     }
     std::cout << std::dec << "=========================================================\n";
 }
-void Screen::displayCPUState() {
-    std::cout << "\n[CPU State]: Displaying execution status...\n";
+void Screen::displayCPUState(const CPU& cpu) {
+    switch (cpu.getStatus()){
+        case CpuStatus::RUNNING:
+                std::cout<<"CPU Status: RUNNING\n";
+             break;
+        case CpuStatus::HALTED:
+                std::cout<<"CPU Status: HALTED\n";
+                break;
+        case CpuStatus::FAULTED:
+                std::cout<<"CPU Status: FAULTED\n";
+                std::cout<<"Error: "<< cpu.getFaultMessage()<<"\n";
+                break;
+              
+    }
+std::cout << "PC: 0x"
+          << std::hex << std::uppercase
+          << cpu.getPC() << "\n";
+std::cout << "IR: 0x"
+          << std::setw(4) << std::setfill('0')
+          << cpu.getIR() << "\n";
+displayRegisters(cpu.getRegisters());
+
+std::cout << std::dec;
+
+
+
+
+
 }
-void Screen::clearOutputBuffer() {
-    outputBuffer = "";
-}
+

@@ -6,6 +6,7 @@
 
 class Memory;
 class RegisterFile;
+class CPU;
 class Screen {
     private:
     std::string outputBuffer;
@@ -13,10 +14,10 @@ class Screen {
     public:
     Screen();
     void displayOutput( unsigned char value);
-    void displayMessage(std::string message);
+    void displayMessage( const std::string& message);
     void displayMemory( const Memory& memory);
     void displayRegisters(const RegisterFile& registers);
-    void displayCPUState();
+    void displayCPUState(const CPU& cpu);
     void clearOutputBuffer();
 };
 
