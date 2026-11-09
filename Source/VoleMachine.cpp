@@ -1,49 +1,107 @@
 #include "VoleMachine.h"
-#include <iostream>
+#include "ProgramLoader.h"
 
-VoleMachine::VoleMachine() {
-    memory.resize(256, "00");
-    registers.resize(16, 0);
-    pc = 0;
-    halted = false;
+#include <stdexcept>
+#include <vector>
+
+VoleMachine::VoleMachine()
+    : memory(),
+      screen(),
+      cpu(memory, screen),
+      programLoaded(false),
+      programStartAddress(0) {
+
+    cpu.reset(0);
 }
 
-void VoleMachine::loadProgram(std::vector<std::string>& prog) {
-    for (int i = 0; i < prog.size(); i++) {
-        memory[i] = prog[i];
+void VoleMachine::loadProgram(const Program& program) {
+
+    const std::vector<uint8_t> bytes = program.getBytes();
+
+    const unsigned int start = program.getStartAddress();
+
+    const unsigned int end =
+        start + static_cast<unsigned int>(bytes.size());
+
+    if (bytes.empty()) {
+        throw std::runtime_error(
+            "Cannot load an empty program."
+        );
     }
-    pc = 0;
-    halted = false;
+
+    if (end > 254) {
+        throw std::runtime_error(
+            "Program exceeds executable memory."
+        );
+    }
+
+    memory.clear();
+
+    for (std::size_t i = 0; i < bytes.size(); i++) {
+
+        memory.write(
+            static_cast<int>(start + i),
+            bytes[i]
+        );
+    }
+
+    programStartAddress = program.getStartAddress();
+
+    programLoaded = true;
+
+    cpu.reset(programStartAddress);
+}
+
+void VoleMachine::loadProgram(
+    const std::string& filename,
+    uint8_t startAddress) {
+
+    ProgramLoader loader(filename);
+
+    Program validatedProgram =
+        loader.loadFromFile(startAddress);
+
+    loadProgram(validatedProgram);
 }
 
 void VoleMachine::step() {
-    if (halted) return;
-    
-    if (pc >= memory.size() || memory[pc] == "00" || memory[pc] == "C000") {
-        halted = true;
-        return;
+
+    if (programLoaded &&
+        cpu.getStatus() == CpuStatus::RUNNING) {
+
+        cpu.step();
     }
-    
-    pc++;
 }
 
 void VoleMachine::run() {
-    while (!halted) {
-        step();
+
+    while (programLoaded &&
+           cpu.getStatus() == CpuStatus::RUNNING) {
+
+        cpu.step();
     }
 }
 
 void VoleMachine::reset() {
-    pc = 0;
-    halted = false;
-    for (int i = 0; i < registers.size(); i++) {
-        registers[i] = 0;
-    }
-    for (int i = 0; i < memory.size(); i++) {
-        memory[i] = "00";
-    }
+
+    memory.clear();
+    screen = Screen();
+    cpu.reset(programStartAddress);
 }
 
 void VoleMachine::getStatus() {
-    std::cout << "PC = " << pc << "\n";
+
+    screen.displayCPUState(cpu);
+}
+
+CPU& VoleMachine::getCPU() {
+    return cpu;
+}
+
+Memory& VoleMachine::getMemory() {
+    return memory;
+}
+
+Screen& VoleMachine::getScreen() {
+    return screen;
 }
