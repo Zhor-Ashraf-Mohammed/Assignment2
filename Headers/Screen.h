@@ -19,6 +19,7 @@ class Screen {
     void displayRegisters(const RegisterFile& registers);
     void displayCPUState(const CPU& cpu);
     void clearOutputBuffer();
+    std::string getOutputBuffer()const;
 };
 
 #endif
