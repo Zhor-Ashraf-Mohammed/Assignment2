@@ -1,24 +1,48 @@
 #ifndef VOLE_MACHINE_H
 #define VOLE_MACHINE_H
 
-#include <vector>
+#include <cstdint>
 #include <string>
 
+#include "CPU.h"
+#include "Memory.h"
+#include "Program.h"
+#include "Screen.h"
+
 class VoleMachine {
-    std::vector<std::string> memory;
-    std::vector<int> registers;
-    int pc;
-    bool halted;
+
+private:
+    Memory memory;
+    Screen screen;
+    CPU cpu;
+
+    bool programLoaded;
+    uint8_t programStartAddress;
 
 public:
+
     VoleMachine();
-    void loadProgram(std::vector<std::string>& prog);
+
+    void loadProgram(const Program& program);
+
+    void loadProgram(
+        const std::string& filename,
+        uint8_t startAddress = 0
+    );
+
     void step();
+
     void run();
+
     void reset();
+
     void getStatus();
+
+    CPU& getCPU();
+
+    Memory& getMemory();
+
+    Screen& getScreen();
 };
-
-
 
 #endif

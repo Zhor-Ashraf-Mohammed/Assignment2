@@ -6,7 +6,7 @@
 #include "CPU.h"
 
 Screen::Screen() {
-    clearOutputBuffer();
+    outputBuffer.clear();
 }
 void Screen::displayOutput(unsigned char value) {
     outputBuffer += static_cast<char>(value);
@@ -60,10 +60,14 @@ std::cout << "IR: 0x"
 displayRegisters(cpu.getRegisters());
 
 std::cout << std::dec;
-
-
-
-
-
 }
+std::string Screen::getOutputBuffer() const {
+    return outputBuffer;
+}
+
+
+
+
+
+
 
