@@ -1,0 +1,25 @@
+// File with team details and who did which part of the code
+SECTION:       S41 & S42
+
+ZIP_FILE:      CS213_A2_Part3_S41_S42_20251165_20251054_20260957_20251076.zip
+
+ID1:           20251165
+NAME1:         Zhor Ashraf Mohammed (Team Leader)
+FILES1:        Memory.h, Memory.cpp, RegisterFile.h, RegisterFile.cpp, Screen.h, Screen.cpp, Report Breakdown, Documentation
+
+ID2:           20251054
+NAME2:         Olfat Ahmed Waheed
+FILES2:        Instruction.h, Instruction.cpp, Opcode.h, CpuStatus.h, FloatCodec.h, FloatCodec.cpp, Program.h, Program.cpp, Repo History Screenshots, team.txt, Documentation, Video Presentation (Part 1)
+
+ID3:           20260957
+NAME3:         Shahd Taha Abdelazeem
+FILES3:        CPU.h, CPU.cpp, 20 Vole Programs Testing & 10 Output Screenshots, AI Design, Final Design, Architecture Integration, Full Presentation Video
+
+ID4:           20251076
+NAME4:         Basma Sabry Abd elhady
+FILES4:        ProgramLoader.h, ProgramLoader.cpp, VoleMachine.h, VoleMachine.cpp, ConsoleMenu.h, ConsoleMenu.cpp, Main.cpp, GUI Implementation (Qt Framework), Video Presentation (Part 3 Simulator GUI)
+
+GITHUB:            https://github.com/Zhor-Ashraf-Mohammed/Assignment2
+VIDEO_DESIGN:      https://drive.google.com/drive/folders/1hzMDDsYu3pfsZMO0LVeOLYyml21DgTPx
+VIDEO_GUI:         https://www.youtube.com/watch?v=nqgvw_q2RBM
+FULL_PRESENTATION: https://drive.google.com/file/d/1NJp4M81SxEu1LN7mltIxlDDdy2tIqXX-/view?usp=sharing
